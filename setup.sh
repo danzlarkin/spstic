@@ -19,6 +19,7 @@ if [ ! -L "/bin/spstic" ]; then
   echo -e ""
   sleep 1
   sudo ln -s $PWD/spstic /bin/spstic
+  sudo ln -s /bin/spstic /bin/spastic
   sudo ln -s /bin/spstic /bin/static
   echo ""
 fi

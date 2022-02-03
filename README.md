@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/danzlarkin/spstic" target="_blank">
-    <img src="https://i.imgur.com/KrMcDja.png">
+    <img src="https://i.imgur.com/xTqezUD.png">
   </a>
 </p>
 
@@ -17,11 +17,11 @@ Static service tool using Deno, Ngrok, Certbot and Cloudflare
 
 ## Requirements
 
-You must first have [deno](https://deno.land/), [ngrok](https://ngrok.io/) and [certbot](https://certbot.eff.org/) installed on your device.
+You must first have [Deno](https://deno.land/), [Ngrok](https://ngrok.io/) and [Certbot](https://certbot.eff.org/) installed on your device.
 
 It is also required that you use [Cloudflare](https://cloudflare.com/) as your DNS for your domain.
 
-You'll need to have a [certbot-dns-cloudflare](https://certbot-dns-cloudflare.readthedocs.io/) installed as a plugin for certbot.
+You'll need to have a [certbot-dns-cloudflare](https://certbot-dns-cloudflare.readthedocs.io/) installed as a plugin for Certbot.
 
 A wildcard domain (e.g. *.example.io) needs to be added to your Ngrok domains and the corresponding CNAME to your Cloudflare DNS records before usage.
 
@@ -40,7 +40,7 @@ The setup script will guide you through the setup process.
 Once setup, [spstic](https://github.com/danzlarkin/spstic) can be ran via terminal in any directory to spin up a static service
 
 ```sh
-  # The command `spstic` or `static` can be used from terminal
+  # The command `spstic`, `spastic` or `static` can be used from terminal
 
   # Deploy a static service from this directory
   spstic
