@@ -17,6 +17,7 @@ if (existsSync(`${Deno.cwd()}/import_map.json`)) {
   
   // Add the import map to the flags
   flags.deno.push(`--importmap=${Deno.cwd()}/import_map.json`);
+  flags.script.push(`--importmap=${Deno.cwd()}/import_map.json`);
 
   // Log to console
   console.log(`\x1b[34m\x1b[1m[spstic]\x1b[0m Using import map located at ${Deno.cwd()}/import_map.json`);

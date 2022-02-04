@@ -18,6 +18,9 @@ async function main() {
 
     // Attempt to extract a port
     if (arg.indexOf('--port=') > -1) config.port = Number(arg.replace('--port=', ''));
+
+    // Attempt to extract the importmap
+    if (arg.indexOf('--importmap=') > -1) config.importmap = arg.replace('--importmap=', '');
   }
 
   // Generate the certificates
