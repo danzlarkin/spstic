@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Get the project directory of script
+ProjectDirectory=$( dirname $(ls -l "/bin/spstic" | sed -n -e 's/^.*-> //p') )
+
 # Handle help
 if [[ $1 == "--help" ]]; then
   echo ""
@@ -76,12 +79,12 @@ elif [[ $1 == "--configure" ]]; then
 
 # Write the config files
 mkdir -p config
-echo "dns_cloudflare_api_token = $CloudflareAPIToken" > config/cloudflare.ini
-cat <<EOF > config/config.js
-export const ProjectDirectory = '$PWD';
-export const CertbotDirectory = '$PWD/certbot';
-export const ConfigDirectory = '$PWD/config';
-export const ScriptsDirectory = '$PWD/scripts';
+echo "dns_cloudflare_api_token = $CloudflareAPIToken" > $ProjectDirectory/config/cloudflare.ini
+cat <<EOF > $ProjectDirectory/config/config.js
+export const ProjectDirectory = '$ProjectDirectory';
+export const CertbotDirectory = '$ProjectDirectory/certbot';
+export const ConfigDirectory = '$ProjectDirectory/config';
+export const ScriptsDirectory = '$ProjectDirectory/scripts';
 export const WildcardDomain = '*.$BaseDomain';
 export const BaseDomain = '$BaseDomain';
 export const CloudflareAPIToken = '$CloudflareAPIToken';
@@ -93,5 +96,5 @@ EOF
 else
 
   # Run with any params
-  deno run --allow-all ./scripts/loader.js $1 $2 $3 $4
+  deno run --allow-all $ProjectDirectory/scripts/loader.js $1 $2 $3 $4
   fi
