@@ -46,7 +46,7 @@ export function refreshMiddleware() {
     } else if (path.endsWith('/refresh.js')) {
 
       // Send back the script
-      context.response.headers.set('Content-Type', 'application/json');
+      context.response.headers.set('Content-Type', 'text/javascript');
       context.response.body = await Deno.readTextFile(`${ScriptsDirectory}/client-injection.js`);
       context.response.status = 200;
 

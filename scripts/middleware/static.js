@@ -17,7 +17,7 @@ export function staticMiddleware() {
       const path = (Deno.cwd() + context.request.url.pathname + (index ? 'index.html' : ''));
 
       // Add the file types for javascript files
-      if (['.js', '.mjs'].some(type => path.endsWith(type))) context.response.headers.set('Content-Type', 'application/javascript');
+      if (['.js', '.mjs'].some(type => path.endsWith(type))) context.response.headers.set('Content-Type', 'text/javascript');
 
       // Read the html, js and mjs files
       if (['.html', '.js', '.mjs'].some(type => path.endsWith(type))) {

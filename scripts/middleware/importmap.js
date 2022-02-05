@@ -37,7 +37,7 @@ export function importMapMiddleware(config) {
       });
       
       // Send the resource
-      context.response.headers.set('Content-Type', 'application/javascript');
+      context.response.headers.set('Content-Type', 'text/javascript');
       context.response.body = await resource.body;
       context.response.status = resource.status;
     
@@ -45,7 +45,13 @@ export function importMapMiddleware(config) {
     } else if (['/', '.html', '.js', '.mjs'].some(type => path.endsWith(type))) {
 
       // Replace any modules for esm
-      context.response.body = context.response.body.replaceAll(/(import.*?from.*?[\'\"])(?<!\.+\/)([\w\@\_\-\/]*?)([\'\"])/igm, (m, pre, mod, post) => pre + '/esm/' + mod + post);
+      context.response.body = context.response.body.replaceAll(/(import.*?from.*?[\'\"])(?<!\.+\/)([\w\@\_\-\/]*?)([\'\"])/igm, (m, pre, mod, post) => {
+        
+        // Return the replace route
+        return pre + '/esm/' + mod + post;
+        // return m;
+        // return pre + imports[mod] + post;
+      });
 
       // Continue to next functionality
       await next();

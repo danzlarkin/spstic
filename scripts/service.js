@@ -6,6 +6,7 @@ import { oakCors } from 'https://deno.land/x/cors/mod.ts';
 import { staticMiddleware } from './middleware/static.js';
 import { importMapMiddleware } from './middleware/importmap.js';
 import { faviconMiddleware } from './middleware/favicon.js';
+import { esbuildMiddleware } from './middleware/esbuild.js';
 import { refreshMiddleware } from './middleware/refresh.js';
 
 // Import the configurations
@@ -34,6 +35,9 @@ export async function generateService(config) {
 
   // Enable import map middleware
   app.use(importMapMiddleware(config));
+
+  // Enable the esbuild middleware
+  app.use(esbuildMiddleware());
 
   // Enable refresh middlewre
   app.use(refreshMiddleware());

@@ -1,5 +1,3 @@
-#!/usr/bin/env -S deno run --allow-all
-
 // Import the standard modules
 import { existsSync } from 'https://deno.land/std/fs/mod.ts';
 

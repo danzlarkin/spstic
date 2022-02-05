@@ -1,5 +1,3 @@
-#!/usr/bin/env -S deno run --allow-all --unstable
-
 // Import the local packages
 import { generateWildcardCertificate } from './certificate.js';
 import { generateService } from './service.js';
