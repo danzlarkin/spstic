@@ -62,6 +62,8 @@ Any required TLS/SSL certificates will be generated and uploaded.
 
 The web address for your service will be displayed in the terminal.
 
+Any JavaScript/JSX files will be minified and transpiled as ES Modules with esbuild.
+
 Any changes made to files in your directory will be live-reloaded.
 
 ## License
