@@ -6,11 +6,11 @@
 
 ***
 
-Static service tool using Deno, Ngrok, Certbot and Cloudflare
+Static service tool using Deno (esbuild & live-reloading), Ngrok, Certbot and Cloudflare
 
 ## Overview
 
-* Deno is used to create a static file server (including live-reloading)
+* Deno is used to create a static file server (including esbuild & live-reloading)
 * Ngrok is used to tunnel this server to any specified domain
 * Certbot is used to issue a TLS/SSL certificate for the specified domain
 * Cloudflare is used for DNS service
