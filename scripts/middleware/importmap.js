@@ -2,7 +2,7 @@
 export function importMapMiddleware(config) {
 
   // Define the import map data
-  const importMap = {
+  let importMap = {
     imports: {}
   };
 
@@ -12,8 +12,8 @@ export function importMapMiddleware(config) {
     // Define the read function
     const readJSON = async(path) => await Deno.readTextFile(path).then(r => JSON.parse(r));
 
-    // Read the import map and bind the imports
-    importMap.imports = await readJSON(config.importmap);
+    // Read and bind the import map
+    importMap = await readJSON(config.importmap);
 
     // Create a file watcher for the importmap
     const watcher = Deno.watchFs(config.importmap);
@@ -24,18 +24,9 @@ export function importMapMiddleware(config) {
       // Skip certian events
       if (['any', 'access'].includes(event.kind)) continue;
 
-      // Read the import map and bind the imports
-      importMap.imports = await readJSON(config.importmap);
+      // Read and bind the import map
+      importMap = await readJSON(config.importmap);
     }
-
-    // Read the import map
-    const data = await Deno.readTextFile(config.importmap);
-
-    // Parse as json
-    const importmap = JSON.parse(data);
-
-    // Bind the imports
-    imports = importmap.imports;
   })();
 
   // Return the Import Map middleware
