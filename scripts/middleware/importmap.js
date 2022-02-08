@@ -13,7 +13,7 @@ export function importMapMiddleware(config) {
     const readJSON = async(path) => await Deno.readTextFile(path).then(r => JSON.parse(r));
 
     // Read the import map and bind the imports
-    importMap.imports = await readJSON(config.importmap));
+    importMap.imports = await readJSON(config.importmap);
 
     // Create a file watcher for the importmap
     const watcher = Deno.watchFs(config.importmap);
@@ -25,7 +25,7 @@ export function importMapMiddleware(config) {
       if (['any', 'access'].includes(event.kind)) continue;
 
       // Read the import map and bind the imports
-      importMap.imports = await readJSON(config.importmap));
+      importMap.imports = await readJSON(config.importmap);
     }
 
     // Read the import map
