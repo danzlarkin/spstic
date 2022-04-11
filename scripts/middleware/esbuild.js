@@ -44,7 +44,7 @@ export function esbuildMiddleware() {
         loader: {
           '.js': 'jsx'
         },
-        minify: true,
+        minify: false,
         write: false
       });
 

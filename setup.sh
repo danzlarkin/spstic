@@ -53,20 +53,29 @@ echo ""
 read -p "    Ngrok API Key: " NgrokAPIKey
 echo ""
 
-# Write the config files
+# Create the config folder
 mkdir -p config
-echo "dns_cloudflare_api_token = $CloudflareAPIToken" > config/cloudflare.ini
+
+# Write the directories
 cat <<EOF > config/config.js
 export const ProjectDirectory = '$PWD';
 export const CertbotDirectory = '$PWD/certbot';
 export const ConfigDirectory = '$PWD/config';
 export const ScriptsDirectory = '$PWD/scripts';
+export * from './credentials.js';
+EOF
+
+# Write the credentials
+cat <<EOF > config/credentials.js
 export const WildcardDomain = '*.$BaseDomain';
 export const BaseDomain = '$BaseDomain';
 export const CloudflareAPIToken = '$CloudflareAPIToken';
 export const NgrokAuthtoken = '$NgrokAuthtoken';
 export const NgrokAPIKey = '$NgrokAPIKey';
 EOF
+
+# Write the cloudflare credentials
+echo "dns_cloudflare_api_token = $CloudflareAPIToken" > config/cloudflare.ini
 
 # Log out the success
 echo -e "\x1b[2m    Congrats, you're all setup and ready to run \x1b[1mspstic\x1b[0m\x1b[2m from your terminal\x1b[0m"

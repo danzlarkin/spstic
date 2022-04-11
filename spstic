@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# Get the directory of the running instnace
+InstanceDirectory=$(cd "$(dirname "$0")" && pwd)
+
+# Get the project directory of script
+ProjectDirectory=$( dirname $(realpath $InstanceDirectory/spstic) )
+
+# Create the config folder
+mkdir -p $ProjectDirectory/config
+
+# Write the directories
+cat <<EOF > $ProjectDirectory/config/config.js
+export const ProjectDirectory = '$ProjectDirectory';
+export const CertbotDirectory = '$ProjectDirectory/certbot';
+export const ConfigDirectory = '$ProjectDirectory/config';
+export const ScriptsDirectory = '$ProjectDirectory/scripts';
+export * from './credentials.js';
+EOF
+
 # Get the project directory of script
 ProjectDirectory=$( dirname $(ls -l "/bin/spstic" | sed -n -e 's/^.*-> //p') )
 
@@ -20,6 +38,9 @@ if [[ $1 == "--help" ]]; then
   echo ""
   echo -e "\x1b[2m\x1b[1m    --port=[port]\x1b[0m"
   echo -e "\x1b[2m      Deploy a static service from this directory on the specfied port (e.g. 8080)\x1b[0m"
+  echo ""
+  echo -e "\x1b[2m\x1b[1m    --local\x1b[0m"
+  echo -e "\x1b[2m      Deploy a static service from this directory without Certbot or Ngrok\x1b[0m"
   echo ""
   echo -e "\x1b[2m\x1b[1m    --configure\x1b[0m"
   echo -e "\x1b[2m      Configure the credentials\x1b[0m"
@@ -77,14 +98,21 @@ elif [[ $1 == "--configure" ]]; then
   echo -e "\x1b[2m      \x1b[4msee:\x1b[0m\x1b[2m\x1b[1m spstic \x1b[2m--help\x1b[0m"
   echo ""
 
-# Write the config files
-mkdir -p config
-echo "dns_cloudflare_api_token = $CloudflareAPIToken" > $ProjectDirectory/config/cloudflare.ini
+
+# Create the config folder
+mkdir -p $ProjectDirectory/config
+
+# Write the directories
 cat <<EOF > $ProjectDirectory/config/config.js
 export const ProjectDirectory = '$ProjectDirectory';
 export const CertbotDirectory = '$ProjectDirectory/certbot';
 export const ConfigDirectory = '$ProjectDirectory/config';
 export const ScriptsDirectory = '$ProjectDirectory/scripts';
+export * from './credentials.js';
+EOF
+
+# Write the credentials
+cat <<EOF > $ProjectDirectory/config/credentials.js
 export const WildcardDomain = '*.$BaseDomain';
 export const BaseDomain = '$BaseDomain';
 export const CloudflareAPIToken = '$CloudflareAPIToken';
@@ -92,9 +120,12 @@ export const NgrokAuthtoken = '$NgrokAuthtoken';
 export const NgrokAPIKey = '$NgrokAPIKey';
 EOF
 
+# Write the cloudflare credentials
+echo "dns_cloudflare_api_token = $CloudflareAPIToken" > $ProjectDirectory/config/cloudflare.ini
+
 # Handle script
 else
 
   # Run with any params
-  deno run --allow-all $ProjectDirectory/scripts/loader.js $1 $2 $3 $4
+  deno run --allow-all --no-check $ProjectDirectory/scripts/loader.js $1 $2 $3 $4
   fi

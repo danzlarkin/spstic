@@ -32,7 +32,7 @@ export function staticMiddleware() {
       } else {
 
         // Read the file as a stream
-        const file = await Deno.open(path, { read: true });
+        const file = await Deno.open(decodeURI(path), { read: true });
 
         // Create a readable filestream
         const readableStream = readableStreamFromReader(file);

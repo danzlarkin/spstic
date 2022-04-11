@@ -15,11 +15,8 @@ import { BaseDomain, NgrokAuthtoken } from '../config/config.js';
 // Generate a service
 export async function generateService(config) {
 
-  // Generate a random port between 8100 and 8200
-  const port = config.port || (8100 + (Math.round(Math.random() * 99) + 1));
-
-  // Generate a random domain from that port
-  const subdomain = config.subdomain || (port + Math.random() + 1).toString(36).substr(4, 8);
+  // Define the ngrok service
+  let ngrok;
 
   // Create an application
   const app = new Application();
@@ -46,26 +43,49 @@ export async function generateService(config) {
   const controller = new AbortController();
 
   // Serve to a specified port
-  const service = app.listen({ port, signal: controller.signal });
+  const service = app.listen({ port: config.port, signal: controller.signal });
 
-  // Log out a message as served
-  console.log(`\x1b[34m\x1b[1m[spstic]\x1b[0m Deployed locally to port ${port}`);
+  // Handle signals to kill
+  Deno.addSignalListener('SIGUSR1', () => {
 
-  // Start an ngrok service
-  const ngrok = Deno.run({
-    cmd: [
-      'ngrok',
-      'http',
-      `-authtoken=${NgrokAuthtoken}`,
-      '-region=au',
-      `-hostname=${subdomain}.${BaseDomain}`,
-      port
-    ]
+    // 
+    console.log('recieved signal');
+  
+    // Kill the service and this script
+    controller.abort();
+
+    // Kill the ngrok service if exists
+    if (ngrok) ngrok.kill('SIGINT');
+
+    // Exit the script
+    Deno.exit(0);
   });
 
-  // Wait for ngrok to close
-  await ngrok.status();
+  // Log out a message as served
+  console.log(`\x1b[34m\x1b[1m[spstic]\x1b[0m Deployed locally to http://localhost:${config.port}`);
 
+  // If not local only use ngrok
+  if (!config.localonly) {
+
+    // Start an ngrok service
+    ngrok = Deno.run({
+      cmd: [
+        'ngrok',
+        'http',
+        `-authtoken=${NgrokAuthtoken}`,
+        '-region=au',
+        `-hostname=${config.subdomain}.${BaseDomain}`,
+        config.port
+      ],
+      stdout: config.verbose ? 'piped' : 'inherit'
+    });
+
+    // Wait for ngrok to close
+    await ngrok.status();
+
+  // Otherwise run localonly
+  } else await service;
+  
   // Log out a message for shutdown
   console.log('\x1b[34m\x1b[1m[spstic]\x1b[0m Shutting service down...');
 
@@ -73,5 +93,5 @@ export async function generateService(config) {
   controller.abort();
 
   // Exit the script
-  Deno.exit(1);
+  Deno.exit(0);
 }

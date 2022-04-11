@@ -19,10 +19,16 @@ async function main() {
 
     // Attempt to extract the importmap
     if (arg.indexOf('--importmap=') > -1) config.importmap = arg.replace('--importmap=', '');
+
+    // Attempt to disable ngrok and certificates
+    if (arg.indexOf('--local') > -1) config.localonly = true;
+
+    // Attempt to log output
+    if (arg.indexOf('--verbose') > -1) config.verbose = true;
   }
 
   // Generate the certificates
-  await generateWildcardCertificate();
+  if (!config.localonly) await generateWildcardCertificate();
 
   // Generate the service
   await generateService(config);

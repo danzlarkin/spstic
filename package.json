@@ -1,0 +1,16 @@
+{
+  "name": "spstic",
+  "version": "0.0.1",
+  "description": "Static service tool using Deno (esbuild & live-reloading), Ngrok, Certbot and Cloudflare",
+  "bin": "./spstic",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danzlarkin/spstic.git"
+  },
+  "author": "Daniel Larkin <daniel@larkin.nz>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danzlarkin/spstic/issues"
+  },
+  "homepage": "https://github.com/danzlarkin/spstic#readme"
+}

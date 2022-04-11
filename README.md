@@ -51,6 +51,9 @@ Once setup, [spstic](https://github.com/danzlarkin/spstic) can be ran via termin
   # Deploy a static service from this directory on the specfied port (e.g. 8080)
   spstic --port=[port]
 
+  # Deploy a static service from this directory without Certbot or Ngrok
+  spstic --local
+
   # Configure the credentials
   spstic --configure
 

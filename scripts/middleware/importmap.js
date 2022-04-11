@@ -47,23 +47,41 @@ export function importMapMiddleware(config) {
           'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
         }
       });
+
+      // Bind the body
+      let body = await resource.text();
+
+      // console.log(body)
+
+      // // Replace any references and add them to the map
+      // body = body.replaceAll(/(import.*?from.*?[\'\"])(?:https\:\/\/cdn\.esm\.sh\/v66\/)([\w\@\_\-\/]*?)([\'\"])/igm, (m, pre, mod, post) => {
+
+      //   // Check if the map is already stored and save if not
+      //   if (!importmap.imports[mod]) importmap.imports[mod] = `https://cdn.esm.sh/v66/${mod}`;
+
+      //   // console.log(mod)
+        
+      //   // Return the replace route
+      //   return pre + '/esm/' + mod + post;
+      // });
       
       // Send the resource
       context.response.headers.set('Content-Type', 'text/javascript');
-      context.response.body = await resource.body;
+      context.response.body = body
       context.response.status = resource.status;
     
     // Map all of the imports statically
     } else if (['/', '.html', '.js', '.mjs'].some(type => path.endsWith(type))) {
 
-      // Replace any modules for esm
-      context.response.body = context.response.body.replaceAll(/(import.*?from.*?[\'\"])(?<!\.+\/)([\w\@\_\-\/]*?)([\'\"])/igm, (m, pre, mod, post) => {
+      // IGNORE FOR LOCAL BUILDING
+      // // Replace any modules for esm
+      // context.response.body = context.response.body.replaceAll(/(import.*?from.*?[\'\"])(?<!\.+\/)([\w\@\_\-\/]*?)([\'\"])/igm, (m, pre, mod, post) => {
         
-        // Return the replace route
-        return pre + '/esm/' + mod + post;
-        // return m;
-        // return pre + imports[mod] + post;
-      });
+      //   // Return the replace route
+      //   return pre + '/esm/' + mod + post;
+      //   // return m;
+      //   // return pre + imports[mod] + post;
+      // });
 
       // Continue to next functionality
       await next();
