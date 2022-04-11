@@ -6,10 +6,25 @@ InstanceDirectory=$(cd "$(dirname "$0")" && pwd)
 # Get the project directory of script
 ProjectDirectory=$( dirname $(realpath $InstanceDirectory/spstic) )
 
+# Link the file if not already done
+if [ ! -L "/bin/spstic" ]; then
+  echo -e "\x1b[2m    We're attempting to link static to your user shell (sudo is required).\x1b[0m"
+  echo -e "\x1b[2m    Please enter your password when required\x1b[0m"
+  echo -e ""
+  sleep 1
+  sudo ln -s $ProjectDirectory/spstic /bin/spstic
+  sudo ln -s /bin/spstic /bin/spastic
+  sudo ln -s /bin/spstic /bin/static
+  echo ""
+fi
+
+# Create the config files if not already done
+if [ ! -f "$ProjectDirectory/config/config.js" ]; then
+
 # Create the config folder
 mkdir -p $ProjectDirectory/config
 
-# Write the directories
+# Write the config
 cat <<EOF > $ProjectDirectory/config/config.js
 export const ProjectDirectory = '$ProjectDirectory';
 export const CertbotDirectory = '$ProjectDirectory/certbot';
@@ -18,8 +33,20 @@ export const ScriptsDirectory = '$ProjectDirectory/scripts';
 export * from './credentials.js';
 EOF
 
-# Get the project directory of script
-ProjectDirectory=$( dirname $(ls -l "/bin/spstic" | sed -n -e 's/^.*-> //p') )
+fi
+# Create the ccredentials files if not already done
+if [ ! -f "$ProjectDirectory/config/credentials.js" ]; then
+
+# Write the credentials (blank)
+cat <<EOF > $ProjectDirectory/config/credentials.js
+export const WildcardDomain = '';
+export const BaseDomain = '';
+export const CloudflareAPIToken = '';
+export const NgrokAuthtoken = '';
+export const NgrokAPIKey = '';
+EOF
+
+fi
 
 # Handle help
 if [[ $1 == "--help" ]]; then
