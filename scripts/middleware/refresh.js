@@ -7,22 +7,35 @@ export function refreshMiddleware() {
   // Create a list of sockets
   const sockets = new Set();
 
-  // Create a file watcher for the working directory
-  const watcher = Deno.watchFs(Deno.cwd());
+  // Create a watcher to observe changes in the socket
+  async function watch(path, recursive = true) {
 
-  // Watch the events in the directory
-  (async() => {
+    // Return if is this path
+    if (path.includes('spstic')) return;
     
     // Watch for the events in the directory
-    for await (const event of watcher) {
+    for await (const event of Deno.watchFs(path, { recursive })) {
 
       // Skip certian events
       if (['any', 'access'].includes(event.kind)) continue;
 
+      // Log the refresh message
+      console.log('\x1b[34m\x1b[1m[spstic]\x1b[0m Detected changes is workspace -- refreshing...');
+
       // Add the watcher socket
       sockets.forEach(socket => socket.send('refresh'));
     }
-  })();
+  }
+
+  // Create a watcher for the current directory (non recursive)
+  watch(Deno.cwd(), false);
+
+  // Read the current directories
+  for (const item of Deno.readDirSync(Deno.cwd())) {
+
+    // Check if the item is a directory and if so watch recursively
+    if (item.isDirectory) watch(`${Deno.cwd()}/${item.name}`);
+  }
 
   // Return the middleware functionality
   return async (context, next) => {

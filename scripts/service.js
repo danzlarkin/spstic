@@ -49,7 +49,7 @@ export async function generateService(config) {
   Deno.addSignalListener('SIGUSR1', () => {
 
     // 
-    console.log('recieved signal');
+    // console.log('recieved signal');
   
     // Kill the service and this script
     controller.abort();
