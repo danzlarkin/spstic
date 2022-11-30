@@ -81,8 +81,8 @@ export async function generateWildcardCertificate() {
     await certbot.status();
 
     // Load the public and private certificates
-    const certificate_pem = await Deno.readTextFile(`${CertbotDirectory}/live/${WildcardDomain}/fullchain.pem`);
-    const private_key_pem = await Deno.readTextFile(`${CertbotDirectory}/live/${WildcardDomain}/privkey.pem`);
+    const certificate_pem = await Deno.readTextFile(`${CertbotDirectory}/live/${BaseDomain}/fullchain.pem`);
+    const private_key_pem = await Deno.readTextFile(`${CertbotDirectory}/live/${BaseDomain}/privkey.pem`);
 
     // Make a fetch request to ngrok services to upload a new certificate
     const certificate = await fetch('https://api.ngrok.com/tls_certificates', {
